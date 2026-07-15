@@ -3,9 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { MedicalFacilitiesModule } from './modules/medical-facilities/medical-facilities.module';
-import { AmbulanceVehiclesModule } from './modules/ambulance-vehicles/ambulance-vehicles.module';
-import { EmergencyModule } from './modules/emergency/emergency.module';
+import { GISMedicalModule } from './modules/gis-medical/gis-medical.module';
 
 @Module({
   imports: [
@@ -33,9 +31,7 @@ import { EmergencyModule } from './modules/emergency/emergency.module';
     }),
 
     // Project modules
-    MedicalFacilitiesModule,
-    AmbulanceVehiclesModule,
-    EmergencyModule,
+    GISMedicalModule,
   ],
   controllers: [AppController],
   providers: [AppService],

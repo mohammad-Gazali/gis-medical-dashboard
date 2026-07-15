@@ -1,6 +1,6 @@
 import { Table, Model, DataType, Column } from 'sequelize-typescript';
 import { MedicalFacilityType } from '../enums/medical-faclitiy-type.enum';
-import { GeoPoint } from '../../../shared/types/geo-point.type';
+import { GeoPoint } from '../types/geo-point.type';
 
 @Table({ tableName: 'medical_facilities' })
 export class MedicalFacility extends Model {
