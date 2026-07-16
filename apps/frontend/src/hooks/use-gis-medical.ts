@@ -19,7 +19,9 @@ export function useGisMedical() {
   const updateFacility = useGisMedicalStore((s) => s.updateFacility);
   const setVehicles = useGisMedicalStore((s) => s.setVehicles);
   const setFacilities = useGisMedicalStore((s) => s.setFacilities);
-  const setSimulationRunning = useGisMedicalStore((s) => s.setSimulationRunning);
+  const setSimulationRunning = useGisMedicalStore(
+    (s) => s.setSimulationRunning,
+  );
 
   useEffect(() => {
     const socket = io(`${WS_URL}/gis-medical`, {
@@ -32,7 +34,13 @@ export function useGisMedical() {
     socket.on('disconnect', () => setConnected(false));
 
     socket.on('vehicle:log', (payload: VehicleLogPayload) => {
-      updateVehicle(payload.vehicleId, { isBusy: payload.isBusyState });
+      // location is now included on every log row (not just busy-state
+      // flips), so this is what makes ambulance markers actually move on
+      // the map in real time instead of only updating on status changes.
+      updateVehicle(payload.vehicleId, {
+        isBusy: payload.isBusyState,
+        location: payload.locationState,
+      });
     });
 
     socket.on('facility:log', (payload: FacilityLogPayload) => {

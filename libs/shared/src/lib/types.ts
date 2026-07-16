@@ -32,6 +32,7 @@ export interface AmbulanceVehicle {
 export interface VehicleLogPayload {
   vehicleId: number;
   isBusyState: boolean;
+  locationState: GeoPoint;
   timestamp: Date;
 }
 

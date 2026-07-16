@@ -24,6 +24,7 @@ export class GisMedicalService {
         const payload: VehicleLogPayload = {
           vehicleId: instance.vehicleId,
           isBusyState: instance.isBusyState,
+          locationState: instance.locationState,
           timestamp: instance.createdAt,
         };
         socket.emit('vehicle:log', payload);

@@ -7,6 +7,7 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { AmbulanceVehicle } from './ambulance-vehicle.model';
+import { GeoPoint } from '@gis-medical/shared';
 
 @Table({
   tableName: 'ambulance_vehicles_history_logs',
@@ -27,4 +28,10 @@ export class AmbulanceVehicleHistoryLog extends Model {
     field: 'is_busy_state',
   })
   isBusyState: boolean;
+
+  @Column({
+    type: DataType.GEOGRAPHY('POINT', 4326),
+    field: 'location_state',
+  })
+  locationState: GeoPoint;
 }

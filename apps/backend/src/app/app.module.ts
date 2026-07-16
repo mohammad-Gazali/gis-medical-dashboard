@@ -22,7 +22,7 @@ import { SeedersModule } from './modules/seeders/seeders.module';
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_DATABASE'),
         autoLoadModels: true,
-        synchronize: configService.get<string>('DEBUG') === 'true',
+        synchronize: true,
 
         define: {
           timestamps: true,       // Enables createdAt and updatedAt

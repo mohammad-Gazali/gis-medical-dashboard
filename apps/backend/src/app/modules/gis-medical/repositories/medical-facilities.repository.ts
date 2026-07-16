@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { MedicalFacility } from '../../../models/medical-facility.model';
 import { MedicalFacilityHistoryLog } from '../../../models/medical-facility-history-log.model';
-import { col, fn, literal } from 'sequelize';
+import { col, fn, literal, Op } from 'sequelize';
 
 @Injectable()
 export class MedicalFacilitiesRepository {
@@ -50,8 +50,10 @@ export class MedicalFacilitiesRepository {
             fn(
               'ST_Distance',
               col('position'),
-              literal(
-                `ST_SetSRID(ST_MakePoint(${longitude}, ${latitude}), 4326)::geography`,
+              fn(
+                'ST_SetSRID',
+                fn('ST_MakePoint', literal(':lon'), literal(':lat')),
+                4326,
               ),
             ),
             'distance',
@@ -60,7 +62,44 @@ export class MedicalFacilitiesRepository {
       },
       order: [[literal('distance'), 'ASC']],
       limit: 1,
+      replacements: { lon: longitude, lat: latitude },
     });
+  }
+
+  /**
+   * Same as findNearestFacility, but only considers facilities that
+   * currently have at least one free bed — used by the simulation/dispatch
+   * logic so an ambulance doesn't get routed to an already-full hospital.
+   * Falls back to the plain nearest-facility (ignoring capacity) if every
+   * facility nearby happens to be full, so the sim never gets stuck.
+   */
+  async findNearestFacilityWithCapacity(longitude: number, latitude: number) {
+    const nearestWithCapacity = await this.facilityModel.findOne({
+      where: { availableBeds: { [Op.gt]: 0 } },
+      attributes: {
+        include: [
+          [
+            fn(
+              'ST_Distance',
+              col('position'),
+              fn(
+                'ST_SetSRID',
+                fn('ST_MakePoint', literal(':lon'), literal(':lat')),
+                4326,
+              ),
+            ),
+            'distance',
+          ],
+        ],
+      },
+      order: [[literal('distance'), 'ASC']],
+      limit: 1,
+      replacements: { lon: longitude, lat: latitude },
+    });
+
+    if (nearestWithCapacity) return nearestWithCapacity;
+
+    return this.findNearestFacility(longitude, latitude);
   }
 
   async findNearbyFacilities(
@@ -70,7 +109,7 @@ export class MedicalFacilitiesRepository {
   ) {
     return this.facilityModel.findAll({
       where: literal(
-        `ST_DWithin(position::geography, ST_SetSRID(ST_MakePoint(${longitude}, ${latitude}), 4326)::geography, ${radiusMeters})`,
+        'ST_DWithin(position::geography, ST_SetSRID(ST_MakePoint(:lon, :lat), 4326)::geography, :radius)',
       ),
       attributes: {
         include: [
@@ -78,8 +117,10 @@ export class MedicalFacilitiesRepository {
             fn(
               'ST_Distance',
               col('position'),
-              literal(
-                `ST_SetSRID(ST_MakePoint(${longitude}, ${latitude}), 4326)::geography`,
+              fn(
+                'ST_SetSRID',
+                fn('ST_MakePoint', literal(':lon'), literal(':lat')),
+                4326,
               ),
             ),
             'distance',
@@ -87,6 +128,7 @@ export class MedicalFacilitiesRepository {
         ],
       },
       order: [[literal('distance'), 'ASC']],
+      replacements: { lon: longitude, lat: latitude, radius: radiusMeters },
     });
   }
 }
