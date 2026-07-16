@@ -1,11 +1,5 @@
-import { OpenLayersMap } from './components/open-layers-map';
-import { Sidebar } from './components/sidebar';
+import { GISMedicalDashboardPage } from './pages/gis-medical-dashboard';
 
 export const App = () => {
-  return (
-    <main className='flex '>
-      <OpenLayersMap />
-      <Sidebar />
-    </main>
-  );
+  return <GISMedicalDashboardPage />;
 };
