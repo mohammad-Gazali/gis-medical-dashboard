@@ -4,8 +4,8 @@ import { Sidebar } from "./components/sidebar"
 export const GISMedicalDashboardPage = () => {
   return (
     <main className='flex '>
-      <OpenLayersMap />
       <Sidebar />
+      <OpenLayersMap />
     </main>
   )
 }
