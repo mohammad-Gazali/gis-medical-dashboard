@@ -2,27 +2,25 @@ import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import { Feature } from 'ol';
 import { Point } from 'ol/geom';
-import { Style, Fill, Stroke, Circle as CircleStyle, Text } from 'ol/style';
+import { Text, Fill, Stroke } from 'ol/style';
 import { fromLonLat } from 'ol/proj';
 import { AmbulanceVehicle } from '@gis-medical/shared';
+import { vehicleIconStyle } from './map-icons';
+import { FeatureLike } from 'ol/Feature';
 
-function vehicleStyle(feature: Feature): Style {
-  const isBusy = feature.get('isBusy') as boolean;
+function vehicleStyle(feature: FeatureLike) {
+  const styles = vehicleIconStyle(feature);
 
-  return new Style({
-    image: new CircleStyle({
-      radius: 6,
-      fill: new Fill({ color: isBusy ? '#E53E3E' : '#38A169' }),
-      stroke: new Stroke({ color: '#ffffff', width: 2 }),
-    }),
-    text: new Text({
-      text: feature.get('plateNumber') as string,
-      font: '10px "Noto Kufi Arabic", sans-serif',
-      fill: new Fill({ color: '#1a1c1e' }),
-      stroke: new Stroke({ color: '#ffffff', width: 3 }),
-      offsetY: -14,
-    }),
+  const label = new Text({
+    text: feature.get('plateNumber') as string,
+    font: '10px "Noto Kufi Arabic", sans-serif',
+    fill: new Fill({ color: '#1a1c1e' }),
+    stroke: new Stroke({ color: '#ffffff', width: 3 }),
+    offsetY: -42,
   });
+  styles.setText(label);
+
+  return styles;
 }
 
 export function createVehicleLayer(): VectorLayer<VectorSource> {

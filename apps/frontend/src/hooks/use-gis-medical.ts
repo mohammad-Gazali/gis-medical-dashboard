@@ -1,31 +1,25 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
 import {
   VehicleLogPayload,
   FacilityLogPayload,
   SimulationStatusResponse,
   EntitiesResponse,
-  AmbulanceVehicle,
-  MedicalFacility,
 } from '@gis-medical/shared';
+import { useGisMedicalStore } from '../stores/gis-medical-store';
 
 const WS_URL = import.meta.env.VITE_WS_URL || 'http://localhost:3000';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
-export interface UseGisMedicalOptions {
-  onVehicleLog?: (payload: VehicleLogPayload) => void;
-  onFacilityLog?: (payload: FacilityLogPayload) => void;
-}
-
-export function useGisMedical(options: UseGisMedicalOptions = {}) {
+export function useGisMedical() {
   const socketRef = useRef<Socket | null>(null);
-  const [connected, setConnected] = useState(false);
-  const [vehicles, setVehicles] = useState<AmbulanceVehicle[]>([]);
-  const [facilities, setFacilities] = useState<MedicalFacility[]>([]);
-  const [simulationRunning, setSimulationRunning] = useState(false);
 
-  const optionsRef = useRef(options);
-  optionsRef.current = options;
+  const setConnected = useGisMedicalStore((s) => s.setConnected);
+  const updateVehicle = useGisMedicalStore((s) => s.updateVehicle);
+  const updateFacility = useGisMedicalStore((s) => s.updateFacility);
+  const setVehicles = useGisMedicalStore((s) => s.setVehicles);
+  const setFacilities = useGisMedicalStore((s) => s.setFacilities);
+  const setSimulationRunning = useGisMedicalStore((s) => s.setSimulationRunning);
 
   useEffect(() => {
     const socket = io(`${WS_URL}/gis-medical`, {
@@ -38,43 +32,33 @@ export function useGisMedical(options: UseGisMedicalOptions = {}) {
     socket.on('disconnect', () => setConnected(false));
 
     socket.on('vehicle:log', (payload: VehicleLogPayload) => {
-      setVehicles((prev) =>
-        prev.map((v) =>
-          v.id === payload.vehicleId ? { ...v, isBusy: payload.isBusyState } : v,
-        ),
-      );
-      optionsRef.current.onVehicleLog?.(payload);
+      updateVehicle(payload.vehicleId, { isBusy: payload.isBusyState });
     });
 
     socket.on('facility:log', (payload: FacilityLogPayload) => {
-      setFacilities((prev) =>
-        prev.map((f) =>
-          f.id === payload.facilityId
-            ? { ...f, availableBeds: payload.availableBedsState }
-            : f,
-        ),
-      );
-      optionsRef.current.onFacilityLog?.(payload);
+      updateFacility(payload.facilityId, {
+        availableBeds: payload.availableBedsState,
+      });
     });
 
     return () => {
       socket.disconnect();
       socketRef.current = null;
     };
-  }, []);
+  }, [setConnected, updateVehicle, updateFacility]);
 
   const fetchEntities = useCallback(async () => {
     const res = await fetch(`${API_URL}/gis-medical`);
     const data: EntitiesResponse = await res.json();
     setVehicles(data.vehicles);
     setFacilities(data.facilities);
-  }, []);
+  }, [setVehicles, setFacilities]);
 
   const fetchSimulationStatus = useCallback(async () => {
     const res = await fetch(`${API_URL}/gis-medical/simulation/status`);
     const data: SimulationStatusResponse = await res.json();
     setSimulationRunning(data.running);
-  }, []);
+  }, [setSimulationRunning]);
 
   const startSimulation = useCallback(async () => {
     const res = await fetch(`${API_URL}/gis-medical/simulation/start`, {
@@ -82,7 +66,7 @@ export function useGisMedical(options: UseGisMedicalOptions = {}) {
     });
     const data: SimulationStatusResponse = await res.json();
     setSimulationRunning(data.running);
-  }, []);
+  }, [setSimulationRunning]);
 
   const stopSimulation = useCallback(async () => {
     const res = await fetch(`${API_URL}/gis-medical/simulation/stop`, {
@@ -90,13 +74,9 @@ export function useGisMedical(options: UseGisMedicalOptions = {}) {
     });
     const data: SimulationStatusResponse = await res.json();
     setSimulationRunning(data.running);
-  }, []);
+  }, [setSimulationRunning]);
 
   return {
-    connected,
-    vehicles,
-    facilities,
-    simulationRunning,
     fetchEntities,
     fetchSimulationStatus,
     startSimulation,

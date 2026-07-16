@@ -1,45 +1,20 @@
-import { useState } from 'react';
 import { SidebarPanel } from '../../../../components/ui/sidebar';
 import { FilterList } from '../../../../components/ui/filter-list';
 import { Button } from '../../../../components/ui/button';
-
-const facilityTypes = [
-  { id: 'hospital', label: 'مستشفيات', checked: true },
-  { id: 'clinic', label: 'عيادات', checked: true },
-  { id: 'field-station', label: 'نقاط إسعاف ميدانية', checked: true },
-];
-
-const statusFilters = [
-  { id: 'operational', label: 'تشغيلي', checked: true },
-  { id: 'warning', label: 'تحذير', checked: true },
-  { id: 'critical', label: 'حرج', checked: true },
-];
+import { useGisMedicalStore } from '../../../../stores/gis-medical-store';
 
 interface SidebarProps {
-  connected: boolean;
-  simulationRunning: boolean;
   onStartSimulation: () => void;
   onStopSimulation: () => void;
 }
 
-export const Sidebar = ({
-  connected,
-  simulationRunning,
-  onStartSimulation,
-  onStopSimulation,
-}: SidebarProps) => {
-  const [facilities, setFacilities] = useState(facilityTypes);
-  const [statuses, setStatuses] = useState(statusFilters);
-
-  const toggleFacility = (id: string) =>
-    setFacilities((prev) =>
-      prev.map((f) => (f.id === id ? { ...f, checked: !f.checked } : f)),
-    );
-
-  const toggleStatus = (id: string) =>
-    setStatuses((prev) =>
-      prev.map((s) => (s.id === id ? { ...s, checked: !s.checked } : s)),
-    );
+export const Sidebar = ({ onStartSimulation, onStopSimulation }: SidebarProps) => {
+  const connected = useGisMedicalStore((s) => s.connected);
+  const simulationRunning = useGisMedicalStore((s) => s.simulationRunning);
+  const facilityFilters = useGisMedicalStore((s) => s.facilityFilters);
+  const statusFilters = useGisMedicalStore((s) => s.statusFilters);
+  const toggleFacilityFilter = useGisMedicalStore((s) => s.toggleFacilityFilter);
+  const toggleStatusFilter = useGisMedicalStore((s) => s.toggleStatusFilter);
 
   return (
     <SidebarPanel>
@@ -69,13 +44,13 @@ export const Sidebar = ({
 
         <FilterList
           title="نوع المرفق"
-          items={facilities}
-          onToggle={toggleFacility}
+          items={facilityFilters}
+          onToggle={toggleFacilityFilter}
         />
         <FilterList
           title="الحالة"
-          items={statuses}
-          onToggle={toggleStatus}
+          items={statusFilters}
+          onToggle={toggleStatusFilter}
         />
       </div>
     </SidebarPanel>

@@ -2,40 +2,31 @@ import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import { Feature } from 'ol';
 import { Point } from 'ol/geom';
-import { Style, Fill, Stroke, Circle as CircleStyle, Text } from 'ol/style';
+import { Text, Fill, Stroke } from 'ol/style';
 import { fromLonLat } from 'ol/proj';
 import { MedicalFacility, MedicalFacilityType } from '@gis-medical/shared';
+import { facilityIconStyle } from './map-icons';
+import { FeatureLike } from 'ol/Feature';
 
-const FACILITY_COLORS: Record<MedicalFacilityType, { fill: string; stroke: string }> = {
-  [MedicalFacilityType.HOSPITAL]: { fill: '#0891b2', stroke: '#0e7490' },
-  [MedicalFacilityType.CLINIC]: { fill: '#0d9488', stroke: '#0f766e' },
-  [MedicalFacilityType.FIELD_MEDICAL_STATION]: { fill: '#059669', stroke: '#047857' },
+const FACILITY_TYPE_LABELS: Record<MedicalFacilityType, string> = {
+  [MedicalFacilityType.HOSPITAL]: 'مستشفى',
+  [MedicalFacilityType.CLINIC]: 'عيادة',
+  [MedicalFacilityType.FIELD_MEDICAL_STATION]: 'نقطة ميدانية',
 };
 
-const FACILITY_LABELS: Record<MedicalFacilityType, string> = {
-  [MedicalFacilityType.HOSPITAL]: 'Hospital',
-  [MedicalFacilityType.CLINIC]: 'Clinic',
-  [MedicalFacilityType.FIELD_MEDICAL_STATION]: 'Field Station',
-};
+function facilityStyle(feature: FeatureLike) {
+  const styles = facilityIconStyle(feature);
 
-function facilityStyle(feature: Feature): Style {
-  const type = feature.get('facilityType') as MedicalFacilityType;
-  const colors = FACILITY_COLORS[type] || FACILITY_COLORS[MedicalFacilityType.CLINIC];
-
-  return new Style({
-    image: new CircleStyle({
-      radius: 8,
-      fill: new Fill({ color: colors.fill }),
-      stroke: new Stroke({ color: '#ffffff', width: 2 }),
-    }),
-    text: new Text({
-      text: FACILITY_LABELS[type] || '',
-      font: '11px "Noto Kufi Arabic", sans-serif',
-      fill: new Fill({ color: '#1a1c1e' }),
-      stroke: new Stroke({ color: '#ffffff', width: 3 }),
-      offsetY: -18,
-    }),
+  const label = new Text({
+    text: FACILITY_TYPE_LABELS[feature.get('facilityType') as MedicalFacilityType] || '',
+    font: '11px "Noto Kufi Arabic", sans-serif',
+    fill: new Fill({ color: '#1a1c1e' }),
+    stroke: new Stroke({ color: '#ffffff', width: 3 }),
+    offsetY: -42,
   });
+  styles.setText(label);
+
+  return styles;
 }
 
 export function createFacilityLayer(): VectorLayer<VectorSource> {

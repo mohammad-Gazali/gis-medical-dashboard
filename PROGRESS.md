@@ -27,7 +27,7 @@
 | Tailwind v4 theme tokens (colors, radii, shadows) | `DONE` | All MD3 tokens in `styles.css` `@theme` block |
 | Typography scale (display, headline, body, label-caps, data-mono) | `DONE` | Custom utility classes in `@layer utilities` |
 | Glassmorphism utility | `DONE` | `.glassmorphism` class with backdrop-blur |
-| Font loading (Noto Kufi Arabic) | `TODO` | Remove CSS import; load via `<link>` in `index.html` or self-host |
+| Font loading (Noto Kufi Arabic) | `DONE` | Loaded via `<link>` in `index.html` (preconnect to Google Fonts) |
 
 ### UI Primitives (`src/components/ui/`)
 
@@ -35,7 +35,7 @@
 |---|---|---|
 | `cn` utility (`src/lib/utils.ts`) | `DONE` | clsx + tailwind-merge |
 | `cva` integration | `DONE` | class-variance-authority installed and used |
-| `Button` (primary / ghost) | `DONE` | cva variants, sm/md/lg sizes |
+| `Button` (primary / destructive / ghost) | `DONE` | cva variants, sm/md/lg sizes |
 | `Card` (glassmorphism overlay) | `DONE` | cva variants, elevated prop |
 | `StatusChip` | `DONE` | cva variants, operational/warning/critical/idle |
 | `FilterList` | `DONE` | cn for conditional classes |
@@ -48,6 +48,7 @@
 | Dashboard layout (sidebar + map, RTL) | `DONE` | Flex container, sidebar on right in RTL |
 | Sidebar filters (facility type, status) | `DONE` | Arabic labels, local state toggles |
 | OpenLayers map container fix (`flex-1`) | `DONE` | Map fills remaining viewport |
+| Sidebar detail panel | `DONE` | Shows entity details on map click, back to filters on close |
 | Floating overlay cards (legend, stats) | `TODO` | Glassmorphism cards over map |
 | Mobile responsive (bottom sheet sidebar) | `TODO` | Sidebar collapses on small screens |
 
@@ -56,18 +57,20 @@
 | Task | Status | Notes |
 |---|---|---|
 | Syria GeoJSON boundary overlay | `DONE` | Orange fill + dark stroke |
-| Facility markers on map | `TODO` | Medical cross icons for hospitals |
-| Ambulance vehicle markers | `TODO` | Real-time position markers |
+| Facility markers on map | `DONE` | SVG icon markers (hospital/clinic/field station) with Arabic labels |
+| Ambulance vehicle markers | `DONE` | SVG icon markers (green=available, red=busy) with plate numbers |
 | Emergency pulsing markers | `TODO` | Red glow animation for active incidents |
-| Map popup/tooltip on marker click | `TODO` | Facility or vehicle details |
+| Map click → detail panel | `DONE` | Click feature → sidebar shows detail panel with entity info |
+| Detail panel (facility info) | `DONE` | Shows name, type, bed capacity with progress bar |
+| Detail panel (vehicle info) | `DONE` | Shows plate number, status indicator |
 
 ### Real-time (WebSocket)
 
 | Task | Status | Notes |
 |---|---|---|
-| Socket.IO client connection | `TODO` | Connect to `ws://host:3000/gis-medical` |
-| Receive vehicle location updates | `TODO` | Update markers in real-time |
-| Receive facility status updates | `TODO` | Update status chips and bed counts |
+| Socket.IO client connection | `DONE` | `useGisMedical` hook connects to `ws://host:3000/gis-medical` |
+| Receive vehicle location updates | `DONE` | Updates map markers in real-time via WS events |
+| Receive facility status updates | `DONE` | Updates facility features and bed counts via WS events |
 
 ### Emergency Dispatch
 
@@ -102,20 +105,21 @@
 
 | Task | Status | Notes |
 |---|---|---|
-| Auto-start on module init | `DONE` | Simulation starts when server boots |
+| API-controlled start/stop/status | `DONE` | POST start/stop, GET status endpoints |
 | Vehicle movement between facilities | `DONE` | PostGIS ST_Distance for nearest facility |
 | Create vehicle history logs | `DONE` | Logs isBusyState changes on every tick |
 | Create facility history logs | `DONE` | Logs availableBedsState changes on visit |
 | Update vehicle entity | `DONE` | Updates location and isBusy |
 | Update facility entity | `DONE` | Updates availableBeds |
+| Simulation toggle button | `DONE` | In sidebar, shows running status |
 
 ### Database
 
 | Task | Status | Notes |
 |---|---|---|
-| Seed data for facilities | `DONE` | 39 facilities across 11 Syrian cities |
-| Seed data for vehicles | `DONE` | 33 vehicles (3 per city) |
-| CLI seeder command | `DONE` | `nx seed backend` runs seed via terminal |
+| Seed data for facilities | `DONE` | 112 facilities across 14 governorates (8 per governorate) |
+| Seed data for vehicles | `DONE` | ~42 vehicles (3 per governorate) |
+| CLI seeder command | `DONE` | `nx seed backend` runs seed via tsx |
 
 ---
 
@@ -142,6 +146,8 @@
 
 | Date | Change |
 |---|---|
+| 2026-07-16 | Zustand store for all shared state (filters, entities, selection, simulation); detail panel moved to map overlay (top-left) |
+| 2026-07-16 | SVG icon markers for facilities and vehicles; map click → detail panel in sidebar |
 | 2026-07-16 | Simulation auto-starts on boot, creates history logs + updates entities; controller returns initial entities with datetime param |
 | 2026-07-16 | Refactored services into `services/` folder, CLI seeder, PostGIS queries, env-dependent CORS |
 | 2026-07-16 | Added backend seeder, simulation service, CORS, and data endpoints |

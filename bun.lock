@@ -29,6 +29,7 @@
         "socket.io-client": "^4.8.3",
         "tailwind-merge": "^3.6.0",
         "tailwindcss": "^4.3.2",
+        "zustand": "^5.0.14",
       },
       "devDependencies": {
         "@eslint/js": "^9.8.0",
@@ -3059,6 +3060,8 @@
     "zarrita": ["zarrita@0.7.3", "http://registry.npmjs.org/zarrita/-/zarrita-0.7.3.tgz", { "dependencies": { "@zarrita/storage": "^0.2.0", "numcodecs": "^0.3.2" } }, "sha512-wChTQ1Ox75INoQCzKAfLWAfB70JJ4KjdW8Sz5x4ZWrFB4Dw+YZdnxHTL0xSdsrB9EmKSeK7fS1Y+I2ibhfGbkw=="],
 
     "zstddec": ["zstddec@0.2.0", "http://registry.npmjs.org/zstddec/-/zstddec-0.2.0.tgz", {}, "sha512-oyPnDa1X5c13+Y7mA/FDMNJrn4S8UNBe0KCqtDmor40Re7ALrPN6npFwyYVRRh+PqozZQdeg23QtbcamZnG5rA=="],
+
+    "zustand": ["zustand@5.0.14", "", { "peerDependencies": { "@types/react": ">=18.0.0", "immer": ">=9.0.6", "react": ">=18.0.0", "use-sync-external-store": ">=1.2.0" }, "optionalPeers": ["@types/react", "immer", "react", "use-sync-external-store"] }, "sha512-/8tAspM5LMPr28b3fwLYrtdj77ECpfZviaP75CMTnwO8ISyaE4GDIG/9rDDYq/cH9D2Xw2A2RXglLInmVBQB/g=="],
 
     "@angular-devkit/schematics/magic-string": ["magic-string@0.30.17", "http://registry.npmjs.org/magic-string/-/magic-string-0.30.17.tgz", { "dependencies": { "@jridgewell/sourcemap-codec": "^1.5.0" } }, "sha512-sNPKHvyjVf7gyjwS4xGTaW/mCnF8wnjtifKBEhxfZ7E/S8tQ0rssrwGNn6q8JH/ohItJfSQp9mBtQYuTlH5QnA=="],
 

@@ -2,18 +2,11 @@ import { useEffect } from 'react';
 import { useGisMedical } from '../../hooks/use-gis-medical';
 import { OpenLayersMap } from './components/open-layers-map';
 import { Sidebar } from './components/sidebar';
+import { DetailPanel } from './components/detail-panel';
 
 export const GISMedicalDashboardPage = () => {
-  const {
-    connected,
-    vehicles,
-    facilities,
-    simulationRunning,
-    fetchEntities,
-    fetchSimulationStatus,
-    startSimulation,
-    stopSimulation,
-  } = useGisMedical();
+  const { fetchEntities, fetchSimulationStatus, startSimulation, stopSimulation } =
+    useGisMedical();
 
   useEffect(() => {
     fetchEntities();
@@ -23,12 +16,13 @@ export const GISMedicalDashboardPage = () => {
   return (
     <main className="flex h-screen w-screen overflow-hidden">
       <Sidebar
-        connected={connected}
-        simulationRunning={simulationRunning}
         onStartSimulation={startSimulation}
         onStopSimulation={stopSimulation}
       />
-      <OpenLayersMap vehicles={vehicles} facilities={facilities} />
+      <div className="relative flex-1">
+        <OpenLayersMap />
+        <DetailPanel />
+      </div>
     </main>
   );
 };
