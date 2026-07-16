@@ -1,21 +1,31 @@
 import { type HTMLAttributes, type ReactNode } from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '../../../lib/utils';
 
-interface CardProps extends HTMLAttributes<HTMLDivElement> {
+const cardVariants = cva(
+  'glassmorphism rounded-lg p-card-padding transition-shadow',
+  {
+    variants: {
+      elevated: {
+        true: 'shadow-level-2',
+        false: 'shadow-level-1',
+      },
+    },
+    defaultVariants: {
+      elevated: false,
+    },
+  }
+);
+
+interface CardProps
+  extends HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof cardVariants> {
   children: ReactNode;
-  elevated?: boolean;
 }
 
-export const Card = ({
-  children,
-  elevated = false,
-  className = '',
-  ...props
-}: CardProps) => {
+export const Card = ({ children, elevated, className, ...props }: CardProps) => {
   return (
-    <div
-      className={`glassmorphism rounded-lg p-card-padding ${elevated ? 'shadow-level-2' : 'shadow-level-1'} ${className}`}
-      {...props}
-    >
+    <div className={cn(cardVariants({ elevated, className }))} {...props}>
       {children}
     </div>
   );

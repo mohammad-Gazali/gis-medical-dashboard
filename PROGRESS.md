@@ -33,11 +33,13 @@
 
 | Component | Status | Notes |
 |---|---|---|
-| `Button` (primary / ghost) | `DONE` | sm, md, lg sizes |
-| `Card` (glassmorphism overlay) | `DONE` | elevated prop for level-2 shadow |
-| `StatusChip` | `DONE` | operational, warning, critical, idle |
-| `FilterList` | `DONE` | Checkbox rows with blue tint on checked |
-| `SidebarPanel` | `DONE` | Fixed 280px wrapper |
+| `cn` utility (`src/lib/utils.ts`) | `DONE` | clsx + tailwind-merge |
+| `cva` integration | `DONE` | class-variance-authority installed and used |
+| `Button` (primary / ghost) | `DONE` | cva variants, sm/md/lg sizes |
+| `Card` (glassmorphism overlay) | `DONE` | cva variants, elevated prop |
+| `StatusChip` | `DONE` | cva variants, operational/warning/critical/idle |
+| `FilterList` | `DONE` | cn for conditional classes |
+| `SidebarPanel` | `DONE` | cn for className merging |
 
 ### Pages & Layout
 
@@ -129,4 +131,5 @@
 
 | Date | Change |
 |---|---|
+| 2026-07-16 | Added `cn` utility and `cva` integration; refactored all UI primitives to use them |
 | 2026-07-16 | Initial design system implementation (theme, primitives, sidebar, layout) |

@@ -1,40 +1,45 @@
-type ChipStatus = 'operational' | 'warning' | 'critical' | 'idle';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '../../../lib/utils';
 
-interface StatusChipProps {
-  status: ChipStatus;
+const statusChipVariants = cva(
+  'inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-label-caps',
+  {
+    variants: {
+      status: {
+        operational: 'bg-primary-container/15 text-on-primary-container',
+        warning: 'bg-amber/20 text-amber',
+        critical: 'bg-error-container/30 text-error',
+        idle: 'bg-surface-container-high text-on-surface-variant',
+      },
+    },
+    defaultVariants: {
+      status: 'idle',
+    },
+  }
+);
+
+const dotVariants = cva('w-1.5 h-1.5 rounded-full', {
+  variants: {
+    status: {
+      operational: 'bg-on-primary-container',
+      warning: 'bg-amber',
+      critical: 'bg-error',
+      idle: 'bg-on-surface-variant',
+    },
+  },
+  defaultVariants: {
+    status: 'idle',
+  },
+});
+
+interface StatusChipProps extends VariantProps<typeof statusChipVariants> {
   label: string;
 }
 
-const statusStyles: Record<ChipStatus, { bg: string; text: string; dot: string }> = {
-  operational: {
-    bg: 'bg-primary-container/15',
-    text: 'text-on-primary-container',
-    dot: 'bg-on-primary-container',
-  },
-  warning: {
-    bg: 'bg-amber/20',
-    text: 'text-amber',
-    dot: 'bg-amber',
-  },
-  critical: {
-    bg: 'bg-error-container/30',
-    text: 'text-error',
-    dot: 'bg-error',
-  },
-  idle: {
-    bg: 'bg-surface-container-high',
-    text: 'text-on-surface-variant',
-    dot: 'bg-on-surface-variant',
-  },
-};
-
 export const StatusChip = ({ status, label }: StatusChipProps) => {
-  const styles = statusStyles[status];
   return (
-    <span
-      className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-label-caps ${styles.bg} ${styles.text}`}
-    >
-      <span className={`w-1.5 h-1.5 rounded-full ${styles.dot}`} />
+    <span className={cn(statusChipVariants({ status }))}>
+      <span className={cn(dotVariants({ status }))} />
       {label}
     </span>
   );

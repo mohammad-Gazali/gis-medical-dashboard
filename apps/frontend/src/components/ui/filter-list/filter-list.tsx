@@ -1,3 +1,5 @@
+import { cn } from '../../../lib/utils';
+
 interface FilterItem {
   id: string;
   label: string;
@@ -19,16 +21,18 @@ export const FilterList = ({ title, items, onToggle }: FilterListProps) => {
           <li key={item.id}>
             <button
               onClick={() => onToggle(item.id)}
-              className={`w-full flex items-center gap-3 px-3 py-2 rounded-default border border-blue-200 text-body-md transition-all ${
+              className={cn(
+                'w-full flex items-center gap-3 px-3 py-2 rounded-default border border-blue-200 text-body-md transition-all',
                 item.checked
                   ? 'bg-filter-active-bg hover:bg-filter-active-bg-hover text-primary font-semibold border-r-4 border-r-primary'
                   : 'text-on-surface-variant hover:bg-surface-container-high'
-              }`}
+              )}
             >
               <span
-                className={`shrink-0 w-4 h-4 rounded-sm border-2 flex items-center justify-center ${
+                className={cn(
+                  'shrink-0 w-4 h-4 rounded-sm border-2 flex items-center justify-center',
                   item.checked ? 'bg-primary border-primary' : 'border-outline-variant'
-                }`}
+                )}
               >
                 {item.checked && (
                   <svg
