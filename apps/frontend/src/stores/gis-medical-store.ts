@@ -4,6 +4,7 @@ import {
   MedicalFacility,
   MedicalFacilityType,
 } from '@gis-medical/shared';
+import { GOVERNORATES } from '../lib/geo/governorate';
 
 export type SelectedItem =
   | {
@@ -28,6 +29,14 @@ export interface FilterItem {
   checked: boolean;
 }
 
+export type VehicleFilter = 'all' | 'busy' | 'available' | 'none';
+
+const FACILITY_TYPE_LABELS: Record<MedicalFacilityType, string> = {
+  [MedicalFacilityType.HOSPITAL]: 'مستشفى',
+  [MedicalFacilityType.CLINIC]: 'عيادة',
+  [MedicalFacilityType.FIELD_MEDICAL_STATION]: 'نقطة ميدانية',
+};
+
 interface GisMedicalState {
   connected: boolean;
   vehicles: AmbulanceVehicle[];
@@ -35,7 +44,9 @@ interface GisMedicalState {
   simulationRunning: boolean;
   selectedItem: SelectedItem;
   facilityFilters: FilterItem[];
-  statusFilters: FilterItem[];
+  regionFilters: FilterItem[];
+  vehicleFilter: VehicleFilter;
+  filterDatetime: string;
 
   setConnected: (connected: boolean) => void;
   setVehicles: (vehicles: AmbulanceVehicle[]) => void;
@@ -43,7 +54,9 @@ interface GisMedicalState {
   setSimulationRunning: (running: boolean) => void;
   setSelectedItem: (item: SelectedItem) => void;
   toggleFacilityFilter: (id: string) => void;
-  toggleStatusFilter: (id: string) => void;
+  toggleRegionFilter: (id: string) => void;
+  setVehicleFilter: (filter: VehicleFilter) => void;
+  setFilterDatetime: (dt: string) => void;
   updateVehicle: (id: number, patch: Partial<AmbulanceVehicle>) => void;
   updateFacility: (id: number, patch: Partial<MedicalFacility>) => void;
 }
@@ -54,16 +67,18 @@ export const useGisMedicalStore = create<GisMedicalState>((set) => ({
   facilities: [],
   simulationRunning: false,
   selectedItem: null,
-  facilityFilters: [
-    { id: 'hospital', label: 'مستشفيات', checked: true },
-    { id: 'clinic', label: 'عيادات', checked: true },
-    { id: 'field-station', label: 'نقاط إسعاف ميدانية', checked: true },
-  ],
-  statusFilters: [
-    { id: 'operational', label: 'تشغيلي', checked: true },
-    { id: 'warning', label: 'تحذير', checked: true },
-    { id: 'critical', label: 'حرج', checked: true },
-  ],
+  facilityFilters: Object.values(MedicalFacilityType).map((t) => ({
+    id: t,
+    label: FACILITY_TYPE_LABELS[t],
+    checked: true,
+  })),
+  regionFilters: GOVERNORATES.map((g) => ({
+    id: g.id,
+    label: g.label,
+    checked: true,
+  })),
+  vehicleFilter: 'all',
+  filterDatetime: '',
 
   setConnected: (connected) => set({ connected }),
   setVehicles: (vehicles) => set({ vehicles }),
@@ -78,12 +93,16 @@ export const useGisMedicalStore = create<GisMedicalState>((set) => ({
       ),
     })),
 
-  toggleStatusFilter: (id) =>
+  toggleRegionFilter: (id) =>
     set((state) => ({
-      statusFilters: state.statusFilters.map((s) =>
-        s.id === id ? { ...s, checked: !s.checked } : s,
+      regionFilters: state.regionFilters.map((r) =>
+        r.id === id ? { ...r, checked: !r.checked } : r,
       ),
     })),
+
+  setVehicleFilter: (filter) => set({ vehicleFilter: filter }),
+
+  setFilterDatetime: (dt) => set({ filterDatetime: dt }),
 
   updateVehicle: (id, patch) =>
     set((state) => ({

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
@@ -10,6 +10,7 @@ import { getSyriaMaskLayer } from './syria-mask';
 import { createFacilityLayer, syncFacilityLayer } from './facility-layer';
 import { createVehicleLayer, syncVehicleLayer } from './vehicle-layer';
 import { useGisMedicalStore } from '../../../../stores/gis-medical-store';
+import { getGovernorate } from '../../../../lib/geo/governorate';
 
 export const OpenLayersMap = () => {
   const mapElement = useRef<HTMLDivElement>(null);
@@ -17,9 +18,45 @@ export const OpenLayersMap = () => {
   const facilityLayerRef = useRef<VectorLayer | null>(null);
   const vehicleLayerRef = useRef<VectorLayer | null>(null);
 
-  const vehicles = useGisMedicalStore((s) => s.vehicles);
-  const facilities = useGisMedicalStore((s) => s.facilities);
+  const allVehicles = useGisMedicalStore((s) => s.vehicles);
+  const allFacilities = useGisMedicalStore((s) => s.facilities);
+  const facilityFilters = useGisMedicalStore((s) => s.facilityFilters);
+  const regionFilters = useGisMedicalStore((s) => s.regionFilters);
+  const vehicleFilter = useGisMedicalStore((s) => s.vehicleFilter);
   const setSelectedItem = useGisMedicalStore((s) => s.setSelectedItem);
+
+  const checkedTypes = useMemo(
+    () => new Set(facilityFilters.filter((f) => f.checked).map((f) => f.id)),
+    [facilityFilters],
+  );
+
+  const checkedRegions = useMemo(
+    () => new Set(regionFilters.filter((r) => r.checked).map((r) => r.id)),
+    [regionFilters],
+  );
+
+  const facilities = useMemo(
+    () =>
+      allFacilities.filter((f) => {
+        if (!checkedTypes.has(f.type)) return false;
+        const region = getGovernorate(f.position.coordinates);
+        if (region && !checkedRegions.has(region)) return false;
+        return true;
+      }),
+    [allFacilities, checkedTypes, checkedRegions],
+  );
+
+  const vehicles = useMemo(() => {
+    if (vehicleFilter === 'none') return [];
+
+    return allVehicles.filter((v) => {
+      const region = getGovernorate(v.location.coordinates);
+      if (region && !checkedRegions.has(region)) return false;
+      if (vehicleFilter === 'busy' && !v.isBusy) return false;
+      if (vehicleFilter === 'available' && v.isBusy) return false;
+      return true;
+    });
+  }, [allVehicles, checkedRegions, vehicleFilter]);
 
   useEffect(() => {
     if (!mapElement.current) return;

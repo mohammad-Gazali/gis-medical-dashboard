@@ -2,7 +2,7 @@ import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import { GeoJSON } from 'ol/format';
 import { Style, Fill, Stroke } from 'ol/style';
-import syriaData from './sy.json';
+import syriaData from '../../../../assets/syria-governorates.json';
 
 export const getSyriaMaskLayer = () => {
   // 1. FIX THE JSON: Remove trailing spaces from all keys in your JSON
