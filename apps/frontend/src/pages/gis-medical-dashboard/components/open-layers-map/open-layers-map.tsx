@@ -47,5 +47,5 @@ export const OpenLayersMap = () => {
     };
   }, []);
 
-  return <div ref={mapElement} className="map-container w-full h-screen" />;
+  return <div ref={mapElement} className="map-container flex-1 h-screen" />;
 };

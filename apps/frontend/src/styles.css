@@ -1,1 +1,153 @@
 @import "tailwindcss";
+
+@theme {
+  --color-primary: #002045;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #1a365d;
+  --color-on-primary-container: #86a0cd;
+  --color-inverse-primary: #adc7f7;
+
+  --color-secondary: #555f71;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #d6e0f6;
+  --color-on-secondary-container: #596376;
+
+  --color-tertiary: #4b0005;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #73000c;
+  --color-on-tertiary-container: #ff736c;
+
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+
+  --color-surface: #faf9fd;
+  --color-on-surface: #1a1c1e;
+  --color-on-surface-variant: #43474e;
+  --color-inverse-surface: #2f3033;
+  --color-inverse-on-surface: #f1f0f4;
+
+  --color-surface-dim: #dad9dd;
+  --color-surface-bright: #faf9fd;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f4f3f7;
+  --color-surface-container: #efedf1;
+  --color-surface-container-high: #e9e7eb;
+  --color-surface-container-highest: #e3e2e6;
+  --color-surface-tint: #455f88;
+
+  --color-outline: #74777f;
+  --color-outline-variant: #c4c6cf;
+  --color-surface-variant: #e3e2e6;
+
+  --color-primary-fixed: #d6e3ff;
+  --color-primary-fixed-dim: #adc7f7;
+  --color-on-primary-fixed: #001b3c;
+  --color-on-primary-fixed-variant: #2d476f;
+
+  --color-secondary-fixed: #d9e3f9;
+  --color-secondary-fixed-dim: #bdc7dc;
+  --color-on-secondary-fixed: #121c2c;
+  --color-on-secondary-fixed-variant: #3d4759;
+
+  --color-tertiary-fixed: #ffdad7;
+  --color-tertiary-fixed-dim: #ffb3ad;
+  --color-on-tertiary-fixed: #410004;
+  --color-on-tertiary-fixed-variant: #930013;
+
+  --color-background: #faf9fd;
+  --color-on-background: #1a1c1e;
+
+  --color-emergency: #E53E3E;
+  --color-amber: #F6AD55;
+  --color-filter-active-bg: #EBF8FF;
+  --color-filter-active-bg-hover: #D1EBFA;
+
+  --font-kufi: 'Noto Kufi Arabic', sans-serif;
+
+  --font-size-display-lg: 2rem;
+  --line-height-display-lg: 2.5rem;
+
+  --font-size-headline-md: 1.5rem;
+  --line-height-headline-md: 2rem;
+
+  --font-size-headline-sm: 1.125rem;
+  --line-height-headline-sm: 1.5rem;
+
+  --font-size-body-lg: 1rem;
+  --line-height-body-lg: 1.5rem;
+
+  --font-size-body-md: 0.875rem;
+  --line-height-body-md: 1.25rem;
+
+  --font-size-label-caps: 0.75rem;
+  --line-height-label-caps: 1rem;
+
+  --font-size-data-mono: 0.875rem;
+  --line-height-data-mono: 1.25rem;
+
+  --radius-sm: 0.25rem;
+  --radius-default: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-full: 9999px;
+
+  --shadow-level-1: 0px 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-level-2: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+@layer utilities {
+  .font-display-lg {
+    font-size: var(--font-size-display-lg);
+    line-height: var(--line-height-display-lg);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .font-headline-md {
+    font-size: var(--font-size-headline-md);
+    line-height: var(--line-height-headline-md);
+    font-weight: 600;
+  }
+
+  .font-headline-sm {
+    font-size: var(--font-size-headline-sm);
+    line-height: var(--line-height-headline-sm);
+    font-weight: 600;
+  }
+
+  .font-body-lg {
+    font-size: var(--font-size-body-lg);
+    line-height: var(--line-height-body-lg);
+    font-weight: 400;
+  }
+
+  .font-body-md {
+    font-size: var(--font-size-body-md);
+    line-height: var(--line-height-body-md);
+    font-weight: 400;
+  }
+
+  .font-label-caps {
+    font-size: var(--font-size-label-caps);
+    line-height: var(--line-height-label-caps);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .font-data-mono {
+    font-size: var(--font-size-data-mono);
+    line-height: var(--line-height-data-mono);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .glassmorphism {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+}
