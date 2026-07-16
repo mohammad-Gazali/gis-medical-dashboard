@@ -10,14 +10,14 @@ const buttonVariants = cva(
         primary:
           'bg-primary text-on-primary hover:bg-primary-container shadow-level-1',
         destructive:
-          'bg-error text-on-error hover:bg-error-container shadow-level-1',
+          'bg-error text-on-error hover:bg-error-container hover:text-on-error-container shadow-level-1',
         ghost:
           'bg-transparent text-on-surface-variant border border-outline-variant hover:bg-surface-container-high',
       },
       size: {
-        sm: 'h-8 px-3 text-body-md rounded-default',
-        md: 'h-10 px-4 text-body-lg rounded-default',
-        lg: 'h-11 px-6 text-body-lg rounded-md',
+        sm: 'h-8 px-3 font-body-md rounded-default',
+        md: 'h-10 px-4 font-body-lg rounded-default',
+        lg: 'h-11 px-6 font-body-lg rounded-md',
       },
     },
     defaultVariants: {

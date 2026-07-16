@@ -22,7 +22,7 @@ export const FilterList = ({ title, items, onToggle }: FilterListProps) => {
             <button
               onClick={() => onToggle(item.id)}
               className={cn(
-                'w-full flex items-center gap-3 px-3 py-2 rounded-default border border-blue-200 text-body-md transition-all',
+                'w-full flex items-center gap-3 px-3 py-2 rounded-default border border-blue-200 font-body-md transition-all',
                 item.checked
                   ? 'bg-filter-active-bg hover:bg-filter-active-bg-hover text-primary font-semibold border-r-4 border-r-primary'
                   : 'text-on-surface-variant hover:bg-surface-container-high'
