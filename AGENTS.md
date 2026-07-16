@@ -147,6 +147,16 @@ See `.env.example` for required variables. Key ones:
 - `PORT` (default: 3000)
 - `DEBUG` (enables Sequelize synchronize)
 
+## Progress Tracking
+
+**Always read [PROGRESS.md](PROGRESS.md) at the start of a session.** It tracks:
+- What has been implemented (`DONE`)
+- What is in progress (`WIP`)
+- What is planned (`TODO`)
+- What is blocked (`BLOCKED`)
+
+Update PROGRESS.md when you complete work, discover new tasks, or change priorities. Keep the file current so the next agent session starts with accurate context.
+
 ## Important Notes
 
 - The project uses **Bun** as the package manager (not npm/yarn)

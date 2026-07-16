@@ -26,7 +26,7 @@ export const FilterList = ({ title, items, onToggle }: FilterListProps) => {
               }`}
             >
               <span
-                className={`flex-shrink-0 w-4 h-4 rounded-sm border-2 flex items-center justify-center ${
+                className={`shrink-0 w-4 h-4 rounded-sm border-2 flex items-center justify-center ${
                   item.checked ? 'bg-primary border-primary' : 'border-outline-variant'
                 }`}
               >
