@@ -1,5 +1,5 @@
 import { Column, DataType, Model, Table } from "sequelize-typescript";
-import { GeoPoint } from "../types/geo-point.type";
+import { GeoPoint } from "@gis-medical/shared";
 
 @Table({
   tableName: 'ambulance_vehicles'

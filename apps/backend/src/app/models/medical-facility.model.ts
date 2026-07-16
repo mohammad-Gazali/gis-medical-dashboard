@@ -1,6 +1,5 @@
 import { Table, Model, DataType, Column } from 'sequelize-typescript';
-import { MedicalFacilityType } from '../enums/medical-faclitiy-type.enum';
-import { GeoPoint } from '../types/geo-point.type';
+import { GeoPoint, MedicalFacilityType } from '@gis-medical/shared';
 
 @Table({ tableName: 'medical_facilities' })
 export class MedicalFacility extends Model {

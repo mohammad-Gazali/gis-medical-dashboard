@@ -6,8 +6,14 @@ import OSM from 'ol/source/OSM';
 import { fromLonLat } from 'ol/proj';
 import 'ol/ol.css';
 import { getSyriaMaskLayer } from './syria-mask';
+import { AmbulanceVehicle, MedicalFacility } from '@gis-medical/shared';
 
-export const OpenLayersMap = () => {
+interface OpenLayersMapProps {
+  vehicles: AmbulanceVehicle[];
+  facilities: MedicalFacility[];
+}
+
+export const OpenLayersMap = ({ vehicles, facilities }: OpenLayersMapProps) => {
   // 1. Create a ref to hold the DOM element
   const mapElement = useRef<HTMLDivElement>(null);
 

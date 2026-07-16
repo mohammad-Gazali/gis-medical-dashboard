@@ -85,9 +85,8 @@
 
 | Endpoint | Status | Notes |
 |---|---|---|
-| `GET /api/gis-medical/medical-facilities` | `TODO` | List all facilities |
+| `GET /api/gis-medical` | `DONE` | Returns initial facilities + vehicles (accepts optional `datetime` query) |
 | `GET /api/gis-medical/medical-facilities/:id` | `TODO` | Single facility detail |
-| `GET /api/gis-medical/ambulance-vehicles` | `TODO` | List all vehicles |
 | `GET /api/gis-medical/ambulance-vehicles/:id` | `TODO` | Single vehicle detail |
 | `POST /api/gis-medical/ambulance-vehicles/:id/dispatch` | `TODO` | Send emergency command |
 
@@ -95,16 +94,28 @@
 
 | Task | Status | Notes |
 |---|---|---|
-| Broadcast vehicle location changes | `TODO` | Hook exists, broadcast logic TODO |
-| Broadcast facility status changes | `TODO` | Hook exists, broadcast logic TODO |
+| Broadcast vehicle changes via afterCreate hooks | `DONE` | Gateway hooks into DB history log creation |
+| Broadcast facility changes via afterCreate hooks | `DONE` | Gateway hooks into DB history log creation |
 | Broadcast dispatch commands | `TODO` | Notify clients of sent commands |
+
+### Simulation
+
+| Task | Status | Notes |
+|---|---|---|
+| Auto-start on module init | `DONE` | Simulation starts when server boots |
+| Vehicle movement between facilities | `DONE` | PostGIS ST_Distance for nearest facility |
+| Create vehicle history logs | `DONE` | Logs isBusyState changes on every tick |
+| Create facility history logs | `DONE` | Logs availableBedsState changes on visit |
+| Update vehicle entity | `DONE` | Updates location and isBusy |
+| Update facility entity | `DONE` | Updates availableBeds |
 
 ### Database
 
 | Task | Status | Notes |
 |---|---|---|
-| Seed data for facilities | `TODO` | Sample hospitals, clinics |
-| Seed data for vehicles | `TODO` | Sample ambulance vehicles |
+| Seed data for facilities | `DONE` | 39 facilities across 11 Syrian cities |
+| Seed data for vehicles | `DONE` | 33 vehicles (3 per city) |
+| CLI seeder command | `DONE` | `nx seed backend` runs seed via terminal |
 
 ---
 
@@ -131,5 +142,8 @@
 
 | Date | Change |
 |---|---|
+| 2026-07-16 | Simulation auto-starts on boot, creates history logs + updates entities; controller returns initial entities with datetime param |
+| 2026-07-16 | Refactored services into `services/` folder, CLI seeder, PostGIS queries, env-dependent CORS |
+| 2026-07-16 | Added backend seeder, simulation service, CORS, and data endpoints |
 | 2026-07-16 | Added `cn` utility and `cva` integration; refactored all UI primitives to use them |
 | 2026-07-16 | Initial design system implementation (theme, primitives, sidebar, layout) |

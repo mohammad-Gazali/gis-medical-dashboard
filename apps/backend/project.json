@@ -80,6 +80,13 @@
       "options": {
         "passWithNoTests": true
       }
+    },
+    "seed": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx ts-node --project tsconfig.app.json src/scripts/seed.ts",
+        "cwd": "apps/backend"
+      }
     }
   }
 }
