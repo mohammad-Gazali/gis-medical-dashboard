@@ -1,6 +1,7 @@
 /// <reference types='vitest' />
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig(() => ({
   resolve: {
@@ -16,7 +17,7 @@ export default defineConfig(() => ({
     port: 4200,
     host: 'localhost',
   },
-  plugins: [react()],
+  plugins: [react(), tailwindcss()],
   build: {
     outDir: '../../dist/apps/frontend',
     emptyOutDir: true,
