@@ -5,7 +5,7 @@ import { MedicalFacilityHistoryLog } from '../../../models/medical-facility-hist
 import { col, fn, literal } from 'sequelize';
 
 @Injectable()
-export class MedicalFacilityRepository {
+export class MedicalFacilitiesRepository {
   constructor(
     @InjectModel(MedicalFacility)
     private facilityModel: typeof MedicalFacility,
@@ -13,8 +13,22 @@ export class MedicalFacilityRepository {
     private medicalFacilityHistoryLogModel: typeof MedicalFacilityHistoryLog,
   ) {}
 
-  async getFacilities() {
+  async findAll() {
     return this.facilityModel.findAll();
+  }
+
+  async updateAvailableBeds(id: number, availableBeds: number) {
+    await this.facilityModel.update({ availableBeds }, { where: { id } });
+  }
+
+  async createHistoryLog(
+    medicalFacilityId: number,
+    availableBedsState: number,
+  ) {
+    await this.medicalFacilityHistoryLogModel.create({
+      medicalFacilityId,
+      availableBedsState,
+    });
   }
 
   public addAfterCreateHookForHistoryLog(

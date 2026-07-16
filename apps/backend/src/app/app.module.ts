@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GISMedicalModule } from './modules/gis-medical/gis-medical.module';
+import { SeedersModule } from './modules/seeders/seeders.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { GISMedicalModule } from './modules/gis-medical/gis-medical.module';
 
     // Project modules
     GISMedicalModule,
+    SeedersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

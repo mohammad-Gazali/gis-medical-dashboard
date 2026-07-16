@@ -1,2 +1,2 @@
 export * from './ambulance-vehicles.repository';
-export * from './medical-facility.repository';
+export * from './medical-facilities.repository';

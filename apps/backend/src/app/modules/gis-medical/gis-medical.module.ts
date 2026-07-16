@@ -9,7 +9,7 @@ import { AmbulanceVehicleHistoryLog } from '../../models/ambulance-vehicle-histo
 import { MedicalFacility } from '../../models/medical-facility.model';
 import { MedicalFacilityHistoryLog } from '../../models/medical-facility-history-log.model';
 import { AmbulanceVehiclesRepository } from './repositories/ambulance-vehicles.repository';
-import { MedicalFacilityRepository } from './repositories/medical-facility.repository';
+import { MedicalFacilitiesRepository } from './repositories/medical-facilities.repository';
 
 @Module({
   imports: [
@@ -26,7 +26,7 @@ import { MedicalFacilityRepository } from './repositories/medical-facility.repos
     GisMedicalService,
     SimulationService,
     AmbulanceVehiclesRepository,
-    MedicalFacilityRepository,
+    MedicalFacilitiesRepository,
   ],
   controllers: [GISMedicalController],
 })

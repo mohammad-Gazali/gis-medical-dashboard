@@ -1,11 +1,6 @@
 import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
-import { InjectModel } from '@nestjs/sequelize';
-import { fn, col, literal } from 'sequelize';
-import { GeoPoint } from '@gis-medical/shared';
-import { AmbulanceVehicle } from '../../../models/ambulance-vehicle.model';
-import { AmbulanceVehicleHistoryLog } from '../../../models/ambulance-vehicle-history-log.model';
-import { MedicalFacility } from '../../../models/medical-facility.model';
-import { MedicalFacilityHistoryLog } from '../../../models/medical-facility-history-log.model';
+import { GeoPoint, AmbulanceVehicle, MedicalFacility } from '@gis-medical/shared';
+import { AmbulanceVehiclesRepository, MedicalFacilitiesRepository } from '../repositories';
 
 interface SimulationState {
   running: boolean;
@@ -31,14 +26,8 @@ export class SimulationService implements OnModuleDestroy {
   }
 
   constructor(
-    @InjectModel(AmbulanceVehicle)
-    private vehicleModel: typeof AmbulanceVehicle,
-    @InjectModel(AmbulanceVehicleHistoryLog)
-    private vehicleLogModel: typeof AmbulanceVehicleHistoryLog,
-    @InjectModel(MedicalFacility)
-    private facilityModel: typeof MedicalFacility,
-    @InjectModel(MedicalFacilityHistoryLog)
-    private facilityLogModel: typeof MedicalFacilityHistoryLog,
+    private ambulanceVehiclesRepository: AmbulanceVehiclesRepository,
+    private medicalFacilitiesRepository: MedicalFacilitiesRepository,
   ) {}
 
   onModuleDestroy() {
@@ -50,20 +39,20 @@ export class SimulationService implements OnModuleDestroy {
       return;
     }
 
-    const vehicles = await this.vehicleModel.findAll();
+    const vehicles = await this.ambulanceVehiclesRepository.findAll();
     if (vehicles.length === 0) {
       this.logger.warn('No vehicles found. Run seed first.');
       return;
     }
 
-    const facilities = await this.facilityModel.findAll();
+    const facilities = await this.medicalFacilitiesRepository.findAll();
     if (facilities.length === 0) {
       this.logger.warn('No facilities found. Run seed first.');
       return;
     }
 
     for (const vehicle of vehicles) {
-      this.assignNewTarget(vehicle, facilities);
+      this.assignNewTarget(vehicle as AmbulanceVehicle, facilities as MedicalFacility[]);
     }
 
     this.state.running = true;
@@ -90,13 +79,13 @@ export class SimulationService implements OnModuleDestroy {
 
   private async tick() {
     try {
-      const vehicles = await this.vehicleModel.findAll();
-      const facilities = await this.facilityModel.findAll();
+      const vehicles = await this.ambulanceVehiclesRepository.findAll();
+      const facilities = await this.medicalFacilitiesRepository.findAll();
 
       for (const vehicle of vehicles) {
         const target = this.state.vehicleTargets.get(vehicle.id);
         if (!target) {
-          this.assignNewTarget(vehicle, facilities);
+          this.assignNewTarget(vehicle as AmbulanceVehicle, facilities as MedicalFacility[]);
           continue;
         }
 
@@ -106,7 +95,7 @@ export class SimulationService implements OnModuleDestroy {
         const distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance < this.ARRIVAL_THRESHOLD) {
-          await this.handleArrival(vehicle);
+          await this.handleArrival(vehicle as AmbulanceVehicle);
           continue;
         }
 
@@ -125,16 +114,22 @@ export class SimulationService implements OnModuleDestroy {
           newBusyState = false;
         }
 
-        await vehicle.update({
-          location: { type: 'Point', coordinates: [newLon, newLat] } as GeoPoint,
-          isBusy: newBusyState,
-        });
+        const newLocation: GeoPoint = {
+          type: 'Point',
+          coordinates: [newLon, newLat],
+        };
+
+        await this.ambulanceVehiclesRepository.updateLocation(
+          vehicle.id,
+          newLocation,
+          newBusyState,
+        );
 
         if (wasBusy !== newBusyState) {
-          await this.vehicleLogModel.create({
-            vehicleId: vehicle.id,
-            isBusyState: newBusyState,
-          });
+          await this.ambulanceVehiclesRepository.createHistoryLog(
+            vehicle.id,
+            newBusyState,
+          );
         }
       }
     } catch (error) {
@@ -145,34 +140,18 @@ export class SimulationService implements OnModuleDestroy {
   private async handleArrival(vehicle: AmbulanceVehicle) {
     const coords = (vehicle.location as unknown as GeoPoint).coordinates;
 
-    const nearestFacility = await this.findNearestFacilityViaPostGIS(coords[0], coords[1]);
+    const nearestFacility = await this.medicalFacilitiesRepository.findNearestFacility(
+      coords[0],
+      coords[1],
+    );
     if (nearestFacility) {
-      await this.simulateFacilityVisit(nearestFacility);
+      await this.simulateFacilityVisit(nearestFacility as MedicalFacility);
     }
 
     this.state.vehicleTargets.delete(vehicle.id);
 
-    const facilities = await this.facilityModel.findAll();
-    this.assignNewTarget(vehicle, facilities);
-  }
-
-  private async findNearestFacilityViaPostGIS(longitude: number, latitude: number) {
-    return this.facilityModel.findOne({
-      attributes: {
-        include: [
-          [
-            fn(
-              'ST_Distance',
-              col('position'),
-              literal(`ST_SetSRID(ST_MakePoint(${longitude}, ${latitude}), 4326)::geography`)
-            ),
-            'distance',
-          ],
-        ],
-      },
-      order: [[literal('distance'), 'ASC']],
-      limit: 1,
-    });
+    const facilities = await this.medicalFacilitiesRepository.findAll();
+    this.assignNewTarget(vehicle, facilities as MedicalFacility[]);
   }
 
   private async simulateFacilityVisit(facility: MedicalFacility) {
@@ -183,11 +162,11 @@ export class SimulationService implements OnModuleDestroy {
     const newAvailable = Math.max(0, Math.min(totalBeds, currentBeds + change));
 
     if (newAvailable !== currentBeds) {
-      await facility.update({ availableBeds: newAvailable });
-      await this.facilityLogModel.create({
-        medicalFacilityId: facility.id,
-        availableBedsState: newAvailable,
-      });
+      await this.medicalFacilitiesRepository.updateAvailableBeds(facility.id, newAvailable);
+      await this.medicalFacilitiesRepository.createHistoryLog(
+        facility.id,
+        newAvailable,
+      );
     }
   }
 
