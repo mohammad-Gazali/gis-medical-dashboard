@@ -17,7 +17,6 @@ import { SeedersModule } from './modules/seeders/seeders.module';
       useFactory: (configService: ConfigService) => {
         console.log({
           dialect: 'postgres',
-          dialectModule: require('pg'),
           host: configService.get<string>('DB_HOST'),
           port: configService.get<number>('DB_PORT'),
           username: configService.get<string>('DB_USERNAME'),
