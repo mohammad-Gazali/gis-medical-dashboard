@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Query } from '@nestjs/common';
+import { Controller, Get, Post } from '@nestjs/common';
 import { GisMedicalService, SimulationService } from './services';
 import { SimulationStatusResponse } from '@gis-medical/shared';
 
@@ -10,7 +10,7 @@ export class GISMedicalController {
   ) {}
 
   @Get()
-  async getEntities(@Query('datetime') datetime?: string) {
+  async getEntities() {
     return this.gisMedicalService.getAllEntities();
   }
 

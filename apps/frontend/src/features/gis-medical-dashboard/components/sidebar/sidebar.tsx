@@ -91,22 +91,6 @@ export const Sidebar = ({ onStartSimulation, onStopSimulation }: SidebarProps) =
             ))}
           </div>
         </div>
-
-        <hr className="border-outline-variant" />
-
-        <div className="space-y-2">
-          <h3 className="font-label-caps text-on-surface-variant px-2">
-            التاريخ والوقت
-          </h3>
-          <input
-            type="datetime-local"
-            value={filterDatetime}
-            onChange={(e) => setFilterDatetime(e.target.value)}
-            className="w-full px-3 py-2 rounded-default border border-outline-variant bg-surface text-on-surface text-body-md
-              focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary
-              [direction:ltr]"
-          />
-        </div>
       </div>
     </SidebarPanel>
   );
