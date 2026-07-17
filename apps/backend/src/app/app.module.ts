@@ -26,7 +26,6 @@ import { SeedersModule } from './modules/seeders/seeders.module';
         dialectOptions: {
           ssl: {
             require: true,
-            rejectUnauthorized: false,
           },
         },
 
