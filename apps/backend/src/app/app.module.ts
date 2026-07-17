@@ -14,27 +14,50 @@ import { SeedersModule } from './modules/seeders/seeders.module';
     SequelizeModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        dialect: 'postgres',
-        dialectModule: require('pg'),
-        host: configService.get<string>('DB_HOST'),
-        port: configService.get<number>('DB_PORT'),
-        username: configService.get<string>('DB_USERNAME'),
-        password: configService.get<string>('DB_PASSWORD'),
-        database: configService.get<string>('DB_DATABASE'),
-        autoLoadModels: true,
-        synchronize: configService.get<string>('DEBUG') === 'true',
-        dialectOptions: {
-          ssl: {
-            require: true,
+      useFactory: (configService: ConfigService) => {
+        console.log({
+          dialect: 'postgres',
+          dialectModule: require('pg'),
+          host: configService.get<string>('DB_HOST'),
+          port: configService.get<number>('DB_PORT'),
+          username: configService.get<string>('DB_USERNAME'),
+          password: configService.get<string>('DB_PASSWORD'),
+          database: configService.get<string>('DB_DATABASE'),
+          autoLoadModels: true,
+          synchronize: configService.get<string>('DEBUG') === 'true',
+          dialectOptions: {
+            ssl: {
+              require: true,
+            },
           },
-        },
 
-        define: {
-          timestamps: true, // Enables createdAt and updatedAt
-          underscored: true, // Converts camelCase to snake_case in the DB (created_at)
-        },
-      }),
+          define: {
+            timestamps: true, // Enables createdAt and updatedAt
+            underscored: true, // Converts camelCase to snake_case in the DB (created_at)
+          },
+        })
+        return {
+          dialect: 'postgres',
+          dialectModule: require('pg'),
+          host: configService.get<string>('DB_HOST'),
+          port: configService.get<number>('DB_PORT'),
+          username: configService.get<string>('DB_USERNAME'),
+          password: configService.get<string>('DB_PASSWORD'),
+          database: configService.get<string>('DB_DATABASE'),
+          autoLoadModels: true,
+          synchronize: configService.get<string>('DEBUG') === 'true',
+          dialectOptions: {
+            ssl: {
+              require: true,
+            },
+          },
+
+          define: {
+            timestamps: true, // Enables createdAt and updatedAt
+            underscored: true, // Converts camelCase to snake_case in the DB (created_at)
+          },
+        }
+      },
     }),
 
     // Project modules
