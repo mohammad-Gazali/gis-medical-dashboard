@@ -17,6 +17,11 @@
     "test:frontend": "nx test frontend",
     "test:e2e": "nx e2e backend-e2e",
     "seed": "nx seed backend",
+    "db:migrate": "nx migrate backend",
+    "db:migrate:undo": "nx migrate:undo backend",
+    "db:migrate:undo:all": "nx migrate:undo:all backend",
+    "db:migrate:status": "nx migrate:status backend",
+    "db:migrate:generate": "nx migrate:generate backend",
     "format": "prettier --write \"apps/**/*.{ts,tsx,css,json}\" \"libs/**/*.ts\""
   },
   "devDependencies": {
@@ -46,6 +51,7 @@
     "@vitejs/plugin-react": "^6.0.0",
     "@vitest/coverage-v8": "~4.1.0",
     "@vitest/ui": "~4.1.0",
+    "dotenv": "^17.4.2",
     "eslint": "^9.8.0",
     "eslint-config-prettier": "^10.0.0",
     "eslint-plugin-import": "2.31.0",
@@ -59,6 +65,7 @@
     "jsdom": "^27.1.0",
     "nx": "23.1.0",
     "prettier": "~3.6.2",
+    "sequelize-cli": "^6.6.5",
     "ts-jest": "^29.4.7",
     "tslib": "^2.3.0",
     "tsx": "^4.23.1",

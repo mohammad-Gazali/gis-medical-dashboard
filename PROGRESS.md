@@ -120,6 +120,9 @@
 | Seed data for facilities | `DONE` | 112 facilities across 14 governorates (8 per governorate) |
 | Seed data for vehicles | `DONE` | ~42 vehicles (3 per governorate) |
 | CLI seeder command | `DONE` | `nx seed backend` runs seed via tsx |
+| Sequelize CLI migrations | `DONE` | `.sequelizerc` + CJS config + dotenv; `apps/backend/src/database/migrations/` |
+| Nx targets for migrations | `DONE` | `migrate`, `migrate:undo`, `migrate:undo:all`, `migrate:status` |
+| Root convenience scripts | `DONE` | `db:migrate`, `db:migrate:undo`, `db:migrate:undo:all`, `db:migrate:status` |
 
 ---
 
@@ -146,6 +149,7 @@
 
 | Date | Change |
 |---|---|
+| 2026-07-17 | Sequelize CLI migrations: `.sequelizerc`, CJS config with dotenv, initial migration, Nx targets, root scripts |
 | 2026-07-16 | Zustand store for all shared state (filters, entities, selection, simulation); detail panel moved to map overlay (top-left) |
 | 2026-07-16 | SVG icon markers for facilities and vehicles; map click → detail panel in sidebar |
 | 2026-07-16 | Simulation auto-starts on boot, creates history logs + updates entities; controller returns initial entities with datetime param |

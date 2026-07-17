@@ -48,6 +48,13 @@ nx e2e backend-e2e                 # End-to-end tests
 # Lint
 nx lint backend                    # Lint backend
 nx lint frontend                   # Lint frontend (includes React plugin)
+
+# Database Migrations (sequelize-cli)
+db:migrate                         # Run pending migrations
+db:migrate:undo                    # Undo last migration
+db:migrate:undo:all                # Undo all migrations
+db:migrate:status                  # Check migration status
+db:migrate:generate <name>         # Generate new migration file
 ```
 
 ## Code Conventions
@@ -105,6 +112,7 @@ nx lint frontend                   # Lint frontend (includes React plugin)
 - Socket.IO gateway with connection/disconnection handling
 - Sequelize models for all entities with PostGIS geography
 - WebSocket service hooks for real-time history log notifications
+- Sequelize CLI migrations (`.sequelizerc`, CJS config with dotenv)
 
 ### In Progress / TODO
 - Backend API endpoints for CRUD operations on facilities and vehicles
@@ -161,6 +169,8 @@ Update PROGRESS.md when you complete work, discover new tasks, or change priorit
 
 - The project uses **Bun** as the package manager (not npm/yarn)
 - RTL layout is required — all UI must support right-to-left
-- Syria GeoJSON data is pre-bundled at `apps/frontend/src/pages/gis-medical-dashboard/components/open-layers-map/sy.json`
+- Syria GeoJSON data is pre-bundled at `apps/frontend/src/assets/syria-governorates.json`
 - PostGIS extension must be enabled in PostgreSQL
+- Sequelize CLI migrations: `.sequelizerc` at `apps/backend/`, config at `apps/backend/src/database/config/config.js`, migrations at `apps/backend/src/database/migrations/`
+- Run migrations via: `db:migrate`, `db:migrate:undo`, `db:migrate:undo:all`, `db:migrate:status`
 - WebSocket namespace is `gis-medical` — connect to `ws://host:3000/gis-medical`
