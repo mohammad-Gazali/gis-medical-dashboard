@@ -49,6 +49,29 @@ bun run dev
 - Backend: `http://localhost:3000`
 - Frontend: `http://localhost:4200`
 
+### Docker
+
+```bash
+# Build and start all services
+docker compose up -d
+
+# Run migrations (after services are up)
+docker compose exec backend npx sequelize-cli db:migrate
+
+# Seed database (optional)
+docker compose exec backend npx tsx src/scripts/seed.ts
+
+# View logs
+docker compose logs -f
+
+# Stop services
+docker compose down
+```
+
+- Frontend: `http://localhost`
+- Backend API: `http://localhost:3000/api`
+- Database: `localhost:5432`
+
 ## Development Commands
 
 ```bash
