@@ -5,7 +5,7 @@ import { Button } from '../../../../components/ui/button';
 import {
   useGisMedicalStore,
   VehicleFilter,
-} from '../../../../stores/gis-medical-store';
+} from '../../store/gis-medical-store';
 import { cn } from '../../../../lib/utils';
 
 const VEHICLE_FILTER_OPTIONS: { id: VehicleFilter; label: string }[] = [

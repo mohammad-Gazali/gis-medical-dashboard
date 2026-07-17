@@ -19,13 +19,11 @@ export class AmbulanceVehiclesRepository {
 
   public async updateLocation(id: number, location: GeoPoint, isBusy: boolean) {
     await this.vehicleModel.update({ location, isBusy }, { where: { id } });
-  }
 
-  public async createHistoryLog(vehicleId: number, isBusyState: boolean, locationState: GeoPoint) {
     await this.ambulanceVehicleHistoryLogModel.create({
-      vehicleId,
-      isBusyState,
-      locationState,
+      vehicleId: id,
+      isBusyState: isBusy,
+      locationState: location,
     });
   }
 

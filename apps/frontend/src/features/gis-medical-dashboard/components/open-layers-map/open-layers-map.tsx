@@ -9,7 +9,7 @@ import 'ol/ol.css';
 import { getSyriaMaskLayer } from './syria-mask';
 import { createFacilityLayer, syncFacilityLayer } from './facility-layer';
 import { createVehicleLayer, syncVehicleLayer } from './vehicle-layer';
-import { useGisMedicalStore } from '../../../../stores/gis-medical-store';
+import { useGisMedicalStore } from '../../store/gis-medical-store';
 import { getGovernorate } from '../../../../lib/geo/governorate';
 
 export const OpenLayersMap = () => {

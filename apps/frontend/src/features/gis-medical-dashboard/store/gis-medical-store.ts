@@ -4,7 +4,7 @@ import {
   MedicalFacility,
   MedicalFacilityType,
 } from '@gis-medical/shared';
-import { GOVERNORATES } from '../lib/geo/governorate';
+import { GOVERNORATES } from '../../../lib/geo/governorate';
 
 export type SelectedItem =
   | {

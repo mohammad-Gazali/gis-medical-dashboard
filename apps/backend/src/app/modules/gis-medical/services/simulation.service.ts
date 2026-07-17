@@ -320,10 +320,6 @@ export class SimulationService implements OnModuleDestroy {
       facilityId,
       newAvailable,
     );
-    await this.medicalFacilitiesRepository.createHistoryLog(
-      facilityId,
-      newAvailable,
-    );
   }
 
   private async persistVehicleTick(
@@ -340,15 +336,6 @@ export class SimulationService implements OnModuleDestroy {
       vehicleId,
       location,
       isBusy,
-    );
-    // location now included on the history log — this is what makes
-    // historical playback of vehicle *movement* possible, not just status
-    // flips, and (via the existing afterCreate hook) is also what gives you
-    // real-time position broadcasting for free.
-    await this.ambulanceVehiclesRepository.createHistoryLog(
-      vehicleId,
-      isBusy,
-      location,
     );
   }
 
@@ -429,10 +416,6 @@ export class SimulationService implements OnModuleDestroy {
 
     const newAvailable = facility.availableBeds + 1;
     await this.medicalFacilitiesRepository.updateAvailableBeds(
-      facility.id,
-      newAvailable,
-    );
-    await this.medicalFacilitiesRepository.createHistoryLog(
       facility.id,
       newAvailable,
     );

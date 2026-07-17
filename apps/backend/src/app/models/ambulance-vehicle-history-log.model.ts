@@ -34,7 +34,4 @@ export class AmbulanceVehicleHistoryLog extends Model {
     field: 'location_state',
   })
   locationState: GeoPoint;
-
-  @Column(DataType.TEXT)
-  numbers: string;
 }

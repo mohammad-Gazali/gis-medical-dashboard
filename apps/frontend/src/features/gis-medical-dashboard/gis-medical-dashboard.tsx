@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useGisMedical } from '../../hooks/use-gis-medical';
+import { useGisMedical } from './hooks/use-gis-medical';
 import { OpenLayersMap } from './components/open-layers-map';
 import { Sidebar } from './components/sidebar';
 import { DetailPanel } from './components/detail-panel';

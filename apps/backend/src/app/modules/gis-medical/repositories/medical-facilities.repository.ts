@@ -19,15 +19,10 @@ export class MedicalFacilitiesRepository {
 
   async updateAvailableBeds(id: number, availableBeds: number) {
     await this.facilityModel.update({ availableBeds }, { where: { id } });
-  }
 
-  async createHistoryLog(
-    medicalFacilityId: number,
-    availableBedsState: number,
-  ) {
     await this.medicalFacilityHistoryLogModel.create({
-      medicalFacilityId,
-      availableBedsState,
+      medicalFacilityId: id,
+      availableBedsState: availableBeds,
     });
   }
 

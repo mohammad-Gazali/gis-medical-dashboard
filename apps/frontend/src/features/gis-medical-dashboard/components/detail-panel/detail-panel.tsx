@@ -1,5 +1,5 @@
 import { MedicalFacilityType } from '@gis-medical/shared';
-import { useGisMedicalStore } from '../../../../stores/gis-medical-store';
+import { useGisMedicalStore } from '../../store/gis-medical-store';
 
 const FACILITY_TYPE_AR: Record<MedicalFacilityType, string> = {
   [MedicalFacilityType.HOSPITAL]: 'مستشفى',

@@ -6,7 +6,7 @@ import {
   SimulationStatusResponse,
   EntitiesResponse,
 } from '@gis-medical/shared';
-import { useGisMedicalStore } from '../stores/gis-medical-store';
+import { useGisMedicalStore } from '../store/gis-medical-store';
 
 const WS_URL = import.meta.env.VITE_WS_URL || 'http://localhost:3000';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
