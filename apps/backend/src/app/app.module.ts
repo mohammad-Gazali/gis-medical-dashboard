@@ -15,21 +15,25 @@ import { SeedersModule } from './modules/seeders/seeders.module';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        dialect: 'postgres',
         dialectModule: require('pg'),
         host: configService.get<string>('DB_HOST'),
         port: configService.get<number>('DB_PORT'),
         username: configService.get<string>('DB_USERNAME'),
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_DATABASE'),
-        ssl: configService.get<string>('DEBUG') !== 'true',
         autoLoadModels: true,
         synchronize: configService.get<string>('DEBUG') === 'true',
+        dialectOptions: {
+          ssl: {
+            require: true,
+            rejectUnauthorized: false,
+          },
+        },
 
         define: {
-          timestamps: true,       // Enables createdAt and updatedAt
-          underscored: true,      // Converts camelCase to snake_case in the DB (created_at)
-        }
+          timestamps: true, // Enables createdAt and updatedAt
+          underscored: true, // Converts camelCase to snake_case in the DB (created_at)
+        },
       }),
     }),
 
