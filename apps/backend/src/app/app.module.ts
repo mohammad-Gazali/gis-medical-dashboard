@@ -15,6 +15,7 @@ import { SeedersModule } from './modules/seeders/seeders.module';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
+        dialect: 'postgres',
         dialectModule: require('pg'),
         host: configService.get<string>('DB_HOST'),
         port: configService.get<number>('DB_PORT'),
